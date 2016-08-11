@@ -1,5 +1,5 @@
 <a id="top"></a>
-<img src="https://raw.githubusercontent.com/prakhar1989/docker-curriculum/master/images/logo.png" alt="docker logo">
+<img src="https://raw.githubusercontent.com/Parkman328/Hadoop-on-Docker/master/images/Hadoop_on_Docker.png" alt="backsplash" height="600" width="800">
 
 *Learn to build and Development and Test Clusters with  Docker*
 
@@ -26,14 +26,19 @@ VMs are great at providing full process isolation for applications: there are ve
 Containers take a different approach: by leveraging the low-level mechanics of the host operating system, containers provide most of the isolation of virtual machines at a fraction of the computing power.
 
 ### What is Hadoop?
-Wikipedia defines [Docker](https://www.docker.com/) as
+Wikipedia defines [Hadoop](http://hadoop.apache.org/) as
 
-> an open-source project that automates the deployment of software applications inside **containers** by providing an additional layer of abstraction and automation of **OS-level virtualization** on Linux.
+>  is an open-source software framework for distributed storage and distributed processing of very large data sets on computer clusters built from commodity hardware. All the modules in Hadoop are designed with a fundamental assumption that hardware failures are common and should be automatically handled by the framework.
 
-Wow! That's a mouthful. In simpler words, Docker is a tool that allows developers, sys-admins etc. to easily deploy their applications in a sandbox (called *containers*) to run on the host operating system i.e. Linux. The key benefit of Docker is that it allows users to **package an application with all of its dependencies into a standardized unit** for software development. Unlike virtual machines, containers do not have the high overhead and hence enable more efficient usage of the underlying system and resources.
+Simpler words Hadoop is an open source big Data Platform with collections of tools for managing and analyzing data in Scale.
+
+### What is Hortonworks?
+[Hortonworks Website] (http://hortonworks.com) 
+
+Hortonworks is a distribution of Hadoop just like linux.  It is the only distribution committed to **100% Open Source and Open Community**.   In this tutorial we will use Hortonworks distribution and components 
 
 
-### Why should I use it?
+### Why did you write this tutorial?
 
 Docker's rise has been nothing short of meteoric. Although containers by themselves are not a new technology, it was not until Docker arrived that they started to get mainstream attention. By providing standard APIs that made containers easy to use and creating a way for the community to collaborate around libraries of containers, Docker has radically changed the face of the technology landscape. In an article published by [The Register](http://www.theregister.co.uk/2014/05/23/google_containerization_two_billion/) in mid-2014, it was claimed that Google runs over **two billion containers per week**.
 
