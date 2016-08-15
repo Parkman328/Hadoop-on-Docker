@@ -1,5 +1,5 @@
 <a id="top"></a>
-<img src="https://raw.githubusercontent.com/Parkman328/Hadoop-on-Docker/master/images/Hadoop_on_Docker.png" alt="backsplash" height="600" width="800">
+<img src="https://raw.githubusercontent.com/Parkman328/Hadoop-on-Docker/master/images/Hadoop_on_Docker.png" alt="backsplash" height="400" width="600">
 
 *Learn to build and Development and Test Clusters with  Docker*
 
