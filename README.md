@@ -1,7 +1,7 @@
 <a id="top"></a>
 <img src="https://raw.githubusercontent.com/Parkman328/Hadoop-on-Docker/master/images/Hadoop_on_Docker.png" alt="backsplash" height="400" width="600">
 
-*Learn to build and Development and Test Clusters with  Docker*
+**Learn to build and Development and Test Hadoop Clusters with Docker**
 
 Written and developed by [John Park](https://github.com/Parkman328).
 
@@ -14,7 +14,7 @@ Wikipedia defines [Docker](https://www.docker.com/) as
 
 > an open-source project that automates the deployment of software applications inside **containers** by providing an additional layer of abstraction and automation of **OS-level virtualization** on Linux.
 
-Wow! That's a mouthful. In simpler words, Docker is a tool that allows developers, sys-admins etc. to easily deploy their applications in a sandbox (called *containers*) to run on the host operating system i.e. Linux. The key benefit of Docker is that it allows users to **package an application with all of its dependencies into a standardized unit** for software development. Unlike virtual machines, containers do not have the high overhead and hence enable more efficient usage of the underlying system and resources.
+Docker is a tool that allows developers, sys-admins etc. to easily deploy their applications in a sandbox (called *containers*) to run on the host operating system i.e. Linux. The key benefit of Docker is that it allows users to **package an application with all of its dependencies into a standardized unit** for software development. Unlike virtual machines, containers do not have the high overhead and hence enable more efficient usage of the underlying system and resources.
 
 
 ### What are containers?
@@ -33,22 +33,20 @@ Wikipedia defines [Hadoop](http://hadoop.apache.org/) as
 Simpler words Hadoop is an open source big Data Platform with collections of tools for managing and analyzing data in Scale.
 
 ### What is Hortonworks?
-[Hortonworks Website] (http://hortonworks.com) 
+[Hortonworks] (http://hortonworks.com) 
 
-Hortonworks is a distribution of Hadoop just like linux.  It is the only distribution committed to **100% Open Source and Open Community**.   In this tutorial we will use Hortonworks distribution and components 
+Hortonworks is a distribution of Hadoop just like linux.  It is the only distribution committed to **100% Open Source and Open Community**.   In this tutorial we will use Hortonworks distribution and components.
 
 
 ### Why did you write this tutorial?
 
-Docker's rise has been nothing short of meteoric. Although containers by themselves are not a new technology, it was not until Docker arrived that they started to get mainstream attention. By providing standard APIs that made containers easy to use and creating a way for the community to collaborate around libraries of containers, Docker has radically changed the face of the technology landscape. In an article published by [The Register](http://www.theregister.co.uk/2014/05/23/google_containerization_two_billion/) in mid-2014, it was claimed that Google runs over **two billion containers per week**.
-
-In addition to Docker's continual growth, Docker, Inc., the developer behind Docker has been valued at over a billion dollars! Due to its benefits of efficiency and portability, Docker has been gaining mind share rapidly, and is now leading the **Containerization** movement. As developers going out into the world, it is important that we understand this trend and see how we can benefit from it.
+I currently work at Hortonworks and I have been struggling with spining and managing clusters and working on Big Data Application on my laptop.  Using Docker and Hadoop I believe I can streamline this process and approach to easily prove out functionality, perform POC and allow customers, community and other developers to experience Docker and Hadoop.
 
 ### What will this tutorial teach me?
-This tutorial aims to be the one-stop shop for getting you to try Hadoop on Docker. Apart from demystifying the Docker landscape, it'll give you hands-on experience with building and deploying your own webapps on the Cloud. We'll be using [Amazon Web Services](http://aws.amazon.com) to deploy a static website, and two dynamic webapps on [EC2](https://aws.amazon.com/ec2/) using [Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) and [Elastic Container Service](https://aws.amazon.com/ecs/). Even if you have no prior experience with deployments, this tutorial should be all you need to get started.
+This tutorial aims to be the one-stop shop for getting you to try Hadoop on Docker. Apart from demystifying the Docker landscape, it'll give you hands-on experience with building and deploying your cluster testing and extending  onto the Cloud. We will start out by building a hadoop cluster on your laptop(Macbook Pro for me) and then We'll be using [Amazon Web Services](http://aws.amazon.com) to deploy a Cluster,  using [Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) and [Elastic Container Service](https://aws.amazon.com/ecs/). Even if you have no prior experience with hadoop and docker, this tutorial should be all you need to get started.
 
 ## Using this Document
-This document contains a series of several sections, each of which explains a particular aspect of Using Hadoop on Docker. In each section, we will be typing commands (or writing code). All the code used in the tutorial is available in the [Github repo](http://github.com/prakhar1989/docker-curriculum).
+This document contains a series of several sections, each of which explains a particular aspect of Using Hadoop on Docker. In each section, we will be typing commands (or writing code). All the code used in the tutorial is available in the [Github repo](http://github.com/parkman328/Hadoop-on-Docker).
 
 <a href="#top" class="top" id="table-of-contents">Top</a>
 ## Table of Contents
@@ -56,37 +54,31 @@ This document contains a series of several sections, each of which explains a pa
 -	[Preface](#preface)
     -	[Prerequisites](#prerequisites)
     -	[Setting up your computer](#setup)
--   [1.0 The Dockerfiles](#Dockerfiles)
-    -   [1.1 Docker Artifacts](#dockerrun)
-    -   [1.2 How this Works](#terminology)
+-   [1.0 Using Docker](#UsingDocker)
+    -   [1.1 Docker Artifacts](#DockerArtifacts)
+    -   [1.2 How this Works](#HowThisWorks)
+    -   [1.3 Docker Files](#DockerFiles)
+    -   [1.4 Building Your Docker Images](#Build Your Docker)
 -   [2.0 Hadoop on Docker](#webapps)
-    -   [2.1 Setting up a Single Node](#static-site)
-    -   [2.2 Setting up a Multi Node](#docker-images)
-    -   [2.3 Using Docker Compose](#our-image)
-    -   [2.4 Dockerfile](#dockerfiles)
-    -   [2.5 Docker on AWS](#docker-aws)
--   [3.0 Using Docker Swarm](#multi-container)
-    -   [3.1 SF Food Trucks](#foodtrucks)
-    -   [3.2 Docker Network](#docker-network)
-    -   [3.3 Docker Compose](#docker-compose)
--   [4.0 Taking Hadoop Containers to AWS](#multi-container)
-    -   [3.1 SF Food Trucks](#foodtrucks)
-    -   [3.2 Docker Network](#docker-network)
-    -   [3.3 Docker Compose](#docker-compose)
--   [5.0 Taking Hadoop Containers to Google Cloud](#multi-container)
-    -   [3.1 SF Food Trucks](#foodtrucks)
-    -   [3.2 Docker Network](#docker-network)
-    -   [3.3 Docker Compose](#docker-compose)
--   [5.0 Taking Hadoop Containers to Azure Container Service](#multi-container)
-    -   [3.1 SF Food Trucks](#foodtrucks)
-    -   [3.2 Docker Network](#docker-network)
-    -   [3.3 Docker Compose](#docker-compose)
-    -   [3.4 AWS Elastic Container Service](#aws-ecs)
--   [6.0 Other Interesting Topics](#multi-container)
-    -   [3.1 Elasticity](#foodtrucks)
-    -   [3.2 Working with object stores](#docker-network)
-    -   [3.3 Docker Compose](#docker-compose)
-    -   [3.4 AWS Elastic Container Service](#aws-ecs)
+    -   [2.1 Setting up a Single Node](#singlenode)
+    -   [2.2 Setting up a Multi Node](#multinode)
+    -   [2.3 Using Docker Compose](#Dockercompose)
+    -   [2.4 Understationd Docker Network](#DockerNetwork)
+    -   [2.5 Working with Docker Cluster on Laptop](#DockerCluster)
+-   [3.0 Using Docker Swarm](#DockerSwarm)
+    -   [3.1 Using Swarm](#UsingSwarm)
+    -   [3.2 Docker Swarm Files](#DockerSwarmFiles)
+    -   [3.3 Docker Compose](#DockerCompose)
+-   [4.0 Taking Hadoop Containers to AWS](#HadoopAWS)
+    -   [4.1 How to Deploy Hadoop Containers to AWS](#AWSHowto)
+-   [5.0 Taking Hadoop Containers to Google Cloud](#HadooponGCP)
+    -  [5.1 How to Deploy Hadoop Containers to Google Cloud](#GPCHowto)
+-   [6.0 Taking Hadoop Containers to Azure Container Service](#HadooponAzure)
+    -  [6.1 How to Deploy Hadoop Containers to Azure](#AzureHowto)
+-   [7.0 Other Interesting Topics](#InterestingTopic)
+    -   [7.1 Elasticity](#Elasticity)
+    -   [7.2 Working with object stores](#docker-network)
+    -   [7.2 Productionalizing](#Productionalizing)
 -   [4.0 Wrap Up](#wrap-up)
     -   [4.1 What Next?](#next-steps)
     -   [4.2 Give Feedback](#feedback)
