@@ -54,34 +54,35 @@ This document contains a series of several sections, each of which explains a pa
 -	[Preface](#preface)
     -	[Prerequisites](#prerequisites)
     -	[Setting up your computer](#setup)
--   [1.0 Using Docker](#UsingDocker)
-    -   [1.1 Docker Artifacts](#DockerArtifacts)
-    -   [1.2 How this Works](#HowThisWorks)
-    -   [1.3 Docker Files](#DockerFiles)
-    -   [1.4 Building Your Docker Images](#Build Your Docker)
--   [2.0 Hadoop on Docker](#webapps)
+-   [1.0 Using Docker](#using-docker)
+    -   [1.1 Docker Artifacts](#docker-artifacts)
+    -   [1.2 How This Setup Works](#how-this-setup-works)
+    -   [1.3 Docker Files](#docker-files)
+    -   [1.4 Building Your Docker Images](#build-your-docker-images)
+-   [2.0 Hadoop on Docker](#hadoop-on-docker)
     -   [2.1 Setting up a Single Node](#singlenode)
     -   [2.2 Setting up a Multi Node](#multinode)
-    -   [2.3 Using Docker Compose](#Dockercompose)
-    -   [2.4 Understationd Docker Network](#DockerNetwork)
-    -   [2.5 Working with Docker Cluster on Laptop](#DockerCluster)
--   [3.0 Using Docker Swarm](#DockerSwarm)
-    -   [3.1 Using Swarm](#UsingSwarm)
-    -   [3.2 Docker Swarm Files](#DockerSwarmFiles)
-    -   [3.3 Docker Compose](#DockerCompose)
--   [4.0 Taking Hadoop Containers to AWS](#HadoopAWS)
-    -   [4.1 How to Deploy Hadoop Containers to AWS](#AWSHowto)
--   [5.0 Taking Hadoop Containers to Google Cloud](#HadooponGCP)
-    -  [5.1 How to Deploy Hadoop Containers to Google Cloud](#GPCHowto)
--   [6.0 Taking Hadoop Containers to Azure Container Service](#HadooponAzure)
-    -  [6.1 How to Deploy Hadoop Containers to Azure](#AzureHowto)
--   [7.0 Other Interesting Topics](#InterestingTopic)
-    -   [7.1 Elasticity](#Elasticity)
-    -   [7.2 Working with object stores](#docker-network)
-    -   [7.2 Productionalizing](#Productionalizing)
--   [4.0 Wrap Up](#wrap-up)
-    -   [4.1 What Next?](#next-steps)
-    -   [4.2 Give Feedback](#feedback)
+    -   [2.3 Using Docker Compose](#docker-compose)
+    -   [2.4 Understationd Docker Network](#docker-network)
+    -   [2.5 Working with Docker Cluster on Laptop](#docker-cluster)
+-   [3.0 Using Docker Swarm](#docker-swarm)
+    -   [3.1 Using Swarm](#using-swarm)
+    -   [3.2 Docker Swarm Files](#docker-swarm-files)
+    -   [3.3 Docker Compose](#docker-compose)
+-   [4.0 Taking Hadoop Containers to AWS](#hadoop-on-aws)
+    -   [4.1 How to Deploy Hadoop Containers to AWS](#aws-how-to)
+-   [5.0 Taking Hadoop Containers to Google Cloud](#hadoop-on-gc)
+    -  [5.1 How to Deploy Hadoop Containers to Google Cloud](#gc-how-to)
+-   [6.0 Taking Hadoop Containers to Azure Container Service](#hadoop-on-azure)
+    -  [6.1 How to Deploy Hadoop Containers to Azure](#azure-how-to)
+-   [7.0 Other Interesting Topics](#interesting-topic)
+    -   [7.1 Elasticity](#elasticity)
+    -   [7.2 Working with object stores](#working-with-object)
+    -   [7.3 Performance of Hadoop on Docker](#performance-hadoop-on-docker)
+    -   [7.4 Productionalizing](#productionalizing)
+-   [8.0 Wrap Up](#wrapUp)
+    -   [8.1 What Next?](#next-steps)
+    -   [8.2 Give Feedback](#feedback)
 -   [References](#references)
 
 
@@ -89,12 +90,18 @@ This document contains a series of several sections, each of which explains a pa
 <a href="#table-of-contents" class="top" id="preface">Top</a>
 ## Preface
 
-> Note: This tutorial uses version **1.12.0-rc2** of Docker. If you find any part of the tutorial incompatible with a future version, please raise an [issue](https://github.com/prakhar1989/docker-curriculum/issues). Thanks!
+> Note: This tutorial uses version **1.12.0 ** of Docker on Mac. If you find any part of the tutorial incompatible with other, please raise an [issue](https://github.com/Parkman328/Hadoop-on-Docker/issues). Thanks!
 
 <a id="prerequisites"></a>
 ### Prerequisites
-There are no specific skills needed for this tutorial beyond a basic comfort with the command line and using a text editor. Prior experience in developing web applications will be helpful but is not required. As we proceed further along the tutorial, we'll make use of a few cloud services. If you're interested in following along, please create an account on each of these websites:
+There are no specific skills needed for this tutorial beyond a basic comfort with the command line and using a text editor. Basic understanding of Hadoop is necessary please take a look at [Hadoop Overview] (http://hortonworks.com/apache/hadoop/). 
 
+Before startingl; please take a look at following sites.
+- [Hortonworks] (http://hortonworks.com/)
+- [Docker] (http://docker.com)
+- [Docker Tutorial] (https://docs.docker.com/docker-for-mac/)
+- [Google Cloud Platform] (https://cloud.google.com/)
+- [Microsoft Azure] (http://azure.microsoft.com)
 - [Amazon Web Services](http://aws.amazon.com/)
 - [Docker Hub](https://hub.docker.com/)
 
@@ -114,7 +121,7 @@ This message shows that your installation appears to be working correctly.
 ...
 ```
 
-##### Python
+##### Python(optional)
 Python comes pre-installed on OSX and (most) Linux distributions. If you need to install Python, you can download the installer [here](https://www.python.org/downloads/).
 
 To check if you have Python (and which version), run this command in the terminal:
@@ -143,8 +150,8 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.60-b23, mixed mode)
 ___________
 
 <a href="#table-of-contents" class="top" id="preface">Top</a>
-<a id="busybox"></a>
-## 1.0 Playing with Busybox
+<a id="using-docker"></a>
+## 1.0 Using Docker
 Now that we have everything setup, it's time to get our hands dirty. In this section, we are going to run a [Busybox](https://en.wikipedia.org/wiki/BusyBox) container on our system and get a taste of the `docker run` command.
 
 To get started, let's run the following in our terminal:
@@ -161,8 +168,8 @@ REPOSITORY              TAG                 IMAGE ID            CREATED         
 busybox                 latest              c51f86c28340        4 weeks ago         1.109 MB
 ```
 
-<a id="dockerrun"></a>
-### 1.1 Docker Run
+<a id="docker-artifacts"></a>
+### 1.1 Docker Artifacts
 Great! Let's now run a Docker **container** based on this image. To do that we are going to use the almighty `docker run` command.
 
 ```
@@ -221,202 +228,76 @@ This command deletes all containers that have a status of `exited`. In case you'
 
 Lastly, you can also delete images that you no longer need by running `docker rmi`.
 
-<a id="terminology"></a>
-### 1.2 Terminology
-In the last section, we used a lot of Docker-specific jargon which might be confusing to some. So before we go further, let me clarify some terminology that is used frequently in the Docker ecosystem.
-
-- *Images* - The blueprints of our application which form the basis of containers. In the demo above, we used the `docker pull` command to download the **busybox** image.
-- *Containers* - Created from Docker images and run the actual application. We create a container using `docker run` which we did using the busybox image that we downloaded. A list of running containers can be seen using the `docker ps` command.
-- *Docker Daemon* - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.
-- *Docker Client* - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as [Kitematic](https://kitematic.com/) which provide a GUI to the users.
-- *Docker Hub* - A [registry](https://hub.docker.com/explore/) of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
-
+<a id="how-this-setup-works"></a>
+### 1.2 How this Setup Works
+<a id="dockle-files"></a>
+### 1.3 Docker Files
+<a id="build-your-docker-images"></a>
+### 1.4 Building your Docker Images
 <a href="#table-of-contents" class="top" id="preface">Top</a>
-<a id="webapps"></a>
-## 2.0 Webapps with Docker
+<a id="hadoop-on-docker"></a>
+## 2.0 Hadoop On Docker
 Great! So we have now looked at `docker run`, played with a Docker container and also got a hang of some terminology. Armed with all this knowledge, we are now ready to get to the real-stuff, i.e. deploying web applications with Docker!
+<a id="singlenode"></a>
+### 2.1 Setting up a Single Node
+<a id="multinode"></a>
+### 2.2 Setting up a Multi Node
+<a id="docker-compose"></a>
+### 2.3 Using Docker Compose
+<a id="docker-network"></a>
+### 2.4 Understanding Docker Netowrk
+<a id="docker-cluster"></a>
+### 2.5 Working with Docker Cluster on Network
 
-<a id="static-site"></a>
-### 2.1 Static Sites
-Let's start by taking baby-steps. The first thing we're going to look at is how we can run a dead-simple static website. We're going to pull a Docker image from Docker Hub, run the container and see how easy it is to run a webserver.
+## 2.0 Hadoop On Docker
+Great! So we have now looked at `docker run`, played with a Docker container and also got a hang of some terminology. Armed with all this knowledge, we are now ready to get to the real-stuff, i.e. deploying web applications with Docker!
+<a id="singlenode"></a>
+### 2.1 Setting up a Single Node
+<a id="multinode"></a>
+### 2.2 Setting up a Multi Node
+<a id="docker-compose"></a>
+### 2.3 Using Docker Compose
+<a id="docker-network"></a>
+### 2.4 Understanding Docker Netowrk
+<a id="docker-cluster"></a>
+### 2.5 Working with Docker Cluster on Network
 
-Let's begin. The image that we are going to use is a single-page [website](http://github.com/prakhar1989/docker-curriculum) that I've already created for the purpose of this demo and hosted on the [registry](https://hub.docker.com/r/prakhar1989/static-site/) - `prakhar1989/static-site`. We can download and run the image directly in one go using `docker run`.
+<a id="hadoop-on-aws"></a>
+## 4.0 Taking Hadoop Containers to AWS
+<a id="aws-how-to"></a>
+### 4.1 How to Deploy Hadoop Containers to AWS
 
-```
-$ docker run prakhar1989/static-site
-```
-Since the image doesn't exist locally, the client will first fetch the image from the registry and then run the image. If all goes well, you should see a `Nginx is running...` message in your terminal. Okay now that the server is running, how do see the website? What port is it running on? And more importantly, how do we access the container directly from our host machine?
+<a id="hadoop-on-gc"></a>
+## 5.0 Taking Hadoop Containers to Google Cloud
+<a id="gc-how-to"></a>
+### 5.1 How to Deploy Hadoop Containers to GC
 
-Well in this case, the client is not exposing any ports so we need to re-run the `docker run` command to publish ports. While we're at it, we should also find a way so that our terminal is not attached to the running container. This way, you can happily close your terminal and keep the container running. This is called **detached** mode.
-
-```
-$ docker run -d -P --name static-site prakhar1989/static-site
-e61d12292d69556eabe2a44c16cbd54486b2527e2ce4f95438e504afb7b02810
-```
-
-In the above command, `-d` will detach our terminal, `-P` will publish all exposed ports to random ports and finally `--name` corresponds to a name we want to give. Now we can see the ports by running the `docker port [CONTAINER]` command
-
-```
-$ docker port static-site
-80/tcp -> 0.0.0.0:32769
-443/tcp -> 0.0.0.0:32768
-```
-
-You can open [http://localhost:32769](http://localhost:32769) in your browser. 
-
-> Note: If you're using docker-toolbox, then you might need to use `docker-machine ip default` to get the IP. 
-
-You can also specify a custom port to which the client will forward connections to the container. 
-
-```
-$ docker run -p 8888:80 prakhar1989/static-site
-Nginx is running...
-```
-<img src="https://raw.githubusercontent.com/prakhar1989/docker-curriculum/master/images/static.png" title="static">
-
-To stop a detached container, run `docker stop` by giving the container ID. 
-
-I'm sure you agree that was super simple. To deploy this on a real server you would just need to install Docker, and run the above Docker command. Now that you've seen how to run a webserver inside a Docker image, you must be wondering - how do I create my own Docker image? This is the question we'll be exploring in the next section.
+<a id="hadoop-on-azure"></a>
+## 6.0 Taking Hadoop Containers to Azure Container Services
+<a id="azure-how-to"></a>
+### 6.1 Setting up a Single Node
 
 
-<a id="docker-images"></a>
-### 2.2 Docker Images
+<a id="interesting-topics"></a>
+## 7.0 Other Interesting Topics
+<a id="elasticity"></a>
+### 7.1 Elasticity
+<a id="working-with-object"></a>
+### 7.2 Working with Object Store
+<a id="performanc-of-hadoop-on-docker"></a>
+### 7.3 Performance of Hadoop on Docker
+<a id="productionalizing"></a>
+### 7.4 Productionalizing Hadoop on Docker
 
-We've looked at images before but in this section we'll dive deeper into what Docker images are and build our own image! Lastly, we'll also use that image to run our application locally and finally deploy on [AWS](http://aws.amazon.com) to share it with our friends! Excited? Great! Let's get started.
+<a id="wrapup"></a>
+## 8.0 Wrap Up
+<a id="next-steps"></a>
+### 8.1 What Next ?
+<a id="feedback"></a>
+### 8.2 Give Feedback
 
-Docker images are the basis of containers. In the previous example, we **pulled** the *Busybox* image from the registry and asked the Docker client to run a container **based** on that image. To see the list of images that are available locally, use the `docker images` command.
-
-```
-$ docker images
-REPOSITORY                      TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
-prakhar1989/catnip              latest              c7ffb5626a50        2 hours ago         697.9 MB
-prakhar1989/static-site         latest              b270625a1631        21 hours ago        133.9 MB
-python                          3-onbuild           cf4002b2c383        5 days ago          688.8 MB
-martin/docker-cleanup-volumes   latest              b42990daaca2        7 weeks ago         22.14 MB
-ubuntu                          latest              e9ae3c220b23        7 weeks ago         187.9 MB
-busybox                         latest              c51f86c28340        9 weeks ago         1.109 MB
-hello-world                     latest              0a6ba66e537a        11 weeks ago        960 B
-```
-
-The above gives a list of images that I've pulled from the registry, along with ones that I've created myself (we'll shortly see how). The `TAG` refers to a particular snapshot of the image and the `IMAGE ID` is the corresponding unique identifier for that image.
-
-For simplicity, you can think of an image akin to a git repository - images can be [committed](https://docs.docker.com/engine/reference/commandline/commit/) with changes and have multiple versions. If you don't provide a specific version number, the client defaults to `latest`. For example, you can pull a specific version of `ubuntu` image
-```
-$ docker pull ubuntu:12.04
-```
-
-To get a new Docker image you can either get it from a registry (such as the Docker Hub) or create your own. There are tens of thousands of images available on [Docker Hub](https://hub.docker.com/explore/). You can also search for images directly from the command line using `docker search`.
-
-An important distinction to be aware of when it comes to images is the difference between base and child images.
-
-- **Base images** are images that has no parent image, usually images with an OS like ubuntu, busybox or debian.
-
-- **Child images** are images that build on base images and add additional functionality.
-
-Then there are official and user images, which can be both base and child images.
-
-- **Official images** are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the `python`, `ubuntu`, `busybox` and `hello-world` images are base images.
-
-- **User images** are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as `user/image-name`.
-
-<a id="our-image"></a>
-### 2.3 Our First Image
-
-Now that we have a better understanding of images, it's time to create our own. Our goal in this section will be to create an image that sandboxes a simple [Flask](http://flask.pocoo.org) application. For the purposes of this workshop, I've already created a fun little [Flask app](https://github.com/prakhar1989/docker-curriculum/tree/master/flask-app) that displays a random cat `.gif` every time it is loaded - because you know, who doesn't like cats? If you haven't already, please go ahead and clone the repository locally.
-
-Before we get started on creating the image, let's first test that the application works correctly locally. Step one is to `cd` into the `flask-app` directory and install the dependencies
-```
-$ cd flask-app
-$ pip install -r requirements.txt
-$ python app.py
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-```
-If all goes well, you should see the output as above. Head over to [http://localhost:5000](http://localhost:5000) to see the app in action.
-
-> Note: If `pip install` is giving you permission denied errors, you might need to try running the command as `sudo`. If you prefer not installing packages system-wide, you can instead try `pip install --user -r requirements.txt`.
-
-Looks great doesn't it? The next step now is to create an image with this web app. As mentioned above, all user images are based off of a base image. Since our application is written in Python, the base image we're going to use will be [Python 3](https://hub.docker.com/_/python/). More specifically, we are going to use the `python:3-onbuild` version of the python image.
-
-What's the `onbuild` version you might ask?
-
-> These images include multiple ONBUILD triggers, which should be all you need to bootstrap most applications. The build will COPY a `requirements.txt` file, RUN `pip install` on said file, and then copy the current directory into `/usr/src/app`.
-
-In other words, the `onbuild` version of the image includes helpers that automate the boring parts of getting an app running. Rather than doing these tasks manually (or scripting these tasks), these images do that work for you. We now have all the ingredients to create our own image - a functioning web app and a base image. How are we going to do that? The answer is - using a **Dockerfile**.
-
-<a id="dockerfiles"></a>
-### 2.4 Dockerfile
-
-A [Dockerfile](https://docs.docker.com/engine/reference/builder/) is a simple text-file that contains a list of commands that the Docker client calls while creating an image. It's a simple way to automate the image creation process. The best part is that the [commands](https://docs.docker.com/engine/reference/builder/#from) you write in a Dockerfile are *almost* identical to their equivalent Linux commands. This means you don't really have to learn new syntax to create your own dockerfiles.
-
-The application directory does contain a Dockerfile but since we're doing this for the first time, we'll create one from scratch. To start, create a new blank file in our favorite text-editor and save it in the **same** folder as the flask app by the name of `Dockerfile`.
-
-We start with specifying our base image. Use the `FROM` keyword to do that -
-```
-FROM python:3-onbuild
-```
-The next step usually is to write the commands of copying the files and installing the dependencies. Luckily for us, the `onbuild` version of the image takes care of that. The next thing we need to the specify is the port number that needs to be exposed. Since our flask app is running on port `5000`, that's what we'll indicate.
-```
-EXPOSE 5000
-```
-The last step is to write the command for running the application, which is simply - `python ./app.py`. We use the [CMD](https://docs.docker.com/engine/reference/builder/#cmd) command to do that -
-```
-CMD ["python", "./app.py"]
-```
-
-The primary purpose of `CMD` is to tell the container which command it should run when it is started. With that, our `Dockerfile` is now ready. This is how it looks like -
-```
-# our base image
-FROM python:3-onbuild
-
-# specify the port number the container should expose
-EXPOSE 5000
-
-# run the application
-CMD ["python", "./app.py"]
-```
-
-Now that we have our `Dockerfile`, we can build our image. The `docker build` command does the heavy-lifting of creating a Docker image from a `Dockerfile`.
-
-The section below shows you the output of running the same. Before you run the command yourself (don't forget the period), make sure to replace my username with yours. This username should be the same on you created when you registered on [Docker hub](https://hub.docker.com). If you haven't done that yet, please go ahead and create an account. The `docker build` command is quite simple - it takes an optional tag name with `-t` and a location of the directory containing the `Dockerfile`.
-
-```
-$ docker build -t prakhar1989/catnip .
-Sending build context to Docker daemon 8.704 kB
-Step 1 : FROM python:3-onbuild
-# Executing 3 build triggers...
-Step 1 : COPY requirements.txt /usr/src/app/
- ---> Using cache
-Step 1 : RUN pip install --no-cache-dir -r requirements.txt
- ---> Using cache
-Step 1 : COPY . /usr/src/app
- ---> 1d61f639ef9e
-Removing intermediate container 4de6ddf5528c
-Step 2 : EXPOSE 5000
- ---> Running in 12cfcf6d67ee
- ---> f423c2f179d1
-Removing intermediate container 12cfcf6d67ee
-Step 3 : CMD python ./app.py
- ---> Running in f01401a5ace9
- ---> 13e87ed1fbc2
-Removing intermediate container f01401a5ace9
-Successfully built 13e87ed1fbc2
-```
-
-If you don't have the `python:3-onbuild` image, the client will first pull the image and then create your image. Hence, your output on running the command will look different from mine. Look carefully and you'll notice that the on-build triggers were executed correctly. If everything went well, your image should be ready! Run `docker images` and see if your image shows.
-
-The last step in this section is to run the image and see if it actually works (replacing my username with yours).
-```
-$ docker run -p 8888:5000 prakhar1989/catnip
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-```
-Head over to the URL specified, where your app should be live.
-
-<img src="https://raw.githubusercontent.com/prakhar1989/docker-curriculum/master/images/catgif.png" title="static">
-
-Congratulations! You have successfully created your first docker image.
-
-<a id="docker-aws"></a>
-### 2.5 Docker on AWS
+<a id="references"></a>
+## References
 
 What good is an application that can't be shared with friends, right? So in this section we are going to see how we can deploy our awesome application on the cloud so that we can share it with our friends! We're going to use AWS [Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) to get our application up and running in a few clicks. We'll also see how easy it is to make our application scalable and manageable with Beanstalk!
 
